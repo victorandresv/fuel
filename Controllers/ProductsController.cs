@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Fuel.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,19 +8,14 @@ namespace Fuel.Controllers
     [Route("api/[controller]")]
     public class ProductsController : Controller
     {
+
         // Get all by company id
         [HttpGet("{company_id}")]
-        public List<ProductModel> Get(string company_id)
+        async public Task<List<ProductModel>> Get(string company_id)
         {
-            List<ProductModel> list = new List<ProductModel>();
-            ProductModel product = new ProductModel() {
-                Name = "Name",
-                Price = 5.6,
-                Img = "URL img",
-                Unit = "unit"
-            };
-            list.Add(product);
-            return list;
+
+            var products = new ProductContext();
+            return await products.GetByCompanyId(company_id);
         }
 
         // Get by product id

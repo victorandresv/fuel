@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Npgsql;
 
 namespace Fuel
 {
@@ -22,14 +21,10 @@ namespace Fuel
         {
 
             services.AddControllers();
-
-            var connectionString = Configuration["PostgreSql:ConnectionString"];
-            var dbPassword = Configuration["PostgreSql:DbPassword"];
-            var builder = new NpgsqlConnectionStringBuilder(connectionString)
-            {
-                Password = dbPassword
-            };
-            //services.AddDbContext<ApplicationContext>(options => options.UseNpgsql(builder.ConnectionString));
+            services.AddMvc()
+             .AddJsonOptions(options => {
+                 options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+             });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
